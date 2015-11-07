@@ -21,6 +21,10 @@
             android:label="@string/title_activity_splash"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity android:name=".activities.Splash" >
+        </activity>
+        <activity android:name=".activities.Favorites" >
+        </activity>
     </application>
 
 </manifest>
