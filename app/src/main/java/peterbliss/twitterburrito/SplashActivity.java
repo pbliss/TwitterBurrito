@@ -1,12 +1,12 @@
-package peterbliss.twitterburrito.activities;
+package peterbliss.twitterburrito;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import peterbliss.twitterburrito.R;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -29,6 +29,11 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 //handle some initial data loading
+
+                Intent i = new Intent(SplashActivity.this, MainActivity.class);
+                startActivity(i);
+                // close this activity
+                finish();
 
             }
         }, SPLASH_TIME_OUT); //this does assume we will be done in the timeout period

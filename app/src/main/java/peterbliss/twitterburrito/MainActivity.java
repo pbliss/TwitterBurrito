@@ -1,34 +1,44 @@
-package peterbliss.twitterburrito.activities;
+package peterbliss.twitterburrito;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import peterbliss.twitterburrito.R;
-import peterbliss.twitterburrito.models.Keyword;
+import io.realm.RealmList;
+import peterbliss.twitterburrito.controllers.KeywordsController;
 
 public class MainActivity extends AppCompatActivity {
-
-    private List<Keyword> keywordList;
+    private ImageButton favoritesButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        keywordList = new ArrayList<>();
+        favoritesButton = (ImageButton) findViewById(R.id.openFavorites);
+        favoritesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, FavoritesActivity.class);
+                startActivity(i);
+                // close this activity
+                finish();
+            }
+        });
+
+        KeywordsController.keywordList = new RealmList<>();
 
         //call the keywords setup
         //defaulting to 5
-        addKeyword("");
-        addKeyword("");
-        addKeyword("");
-        addKeyword("");
-        addKeyword("");
+        KeywordsController.addKeyword("android");
+        KeywordsController.addKeyword("angularJS");
+        KeywordsController.addKeyword("java");
+        KeywordsController.addKeyword("burrito");
+        KeywordsController.addKeyword("beer");
     }
 
     @Override
@@ -51,15 +61,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    //Adds a tab for a specified keyword to the system and registers it for search
-    public void addKeyword(String term) {
-        Keyword keyword = new Keyword();
-        keyword.setKeyword(term);
-
-        //TODO fire off the query to twitter for the tweets
-
-        keywordList.add(keyword);
     }
 }
