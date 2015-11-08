@@ -1,0 +1,103 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" tools:context="peterbliss.twitterburrito.TweetFragment">
+
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/thumbnail"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:scaleType="fitXY"
+        android:layout_marginLeft="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Name"
+        android:id="@+id/name"
+        android:layout_alignTop="@+id/thumbnail"
+        android:layout_toEndOf="@+id/thumbnail"
+        android:layout_marginStart="15dp"
+        android:textStyle="bold"
+        android:textColor="@color/textDark" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="\@screen_name"
+        android:id="@+id/screen_name"
+        android:textColor="@color/textGreyBlue"
+        android:layout_below="@+id/name"
+        android:layout_alignStart="@+id/name" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Text"
+        android:id="@+id/text"
+        android:textColor="@color/textDark"
+        android:layout_below="@+id/thumbnail"
+        android:layout_alignStart="@+id/thumbnail" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="created_at"
+        android:id="@+id/created_at"
+        android:textColor="@color/textGreyBlue"
+        android:layout_below="@+id/text"
+        android:layout_alignStart="@+id/text" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/retweetCountIcon"
+        android:layout_below="@+id/created_at"
+        android:layout_toEndOf="@+id/text"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/retweetcount" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="retweet_count"
+        android:id="@+id/retweet_count"
+        android:textColor="@color/textGreyBlue"
+        android:layout_alignTop="@+id/retweetCountIcon"
+        android:layout_alignStart="@+id/screen_name" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/favoriteCountIcon"
+        android:layout_alignTop="@+id/retweet_count"
+        android:layout_toEndOf="@+id/retweet_count"
+        android:layout_marginStart="19dp"
+        android:background="@drawable/favoritecount"
+        android:baselineAlignBottom="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="favorite_count"
+        android:id="@+id/favorite_count"
+        android:textColor="@color/textGreyBlue"
+        android:layout_alignTop="@+id/favoriteCountIcon"
+        android:layout_toEndOf="@+id/favoriteCountIcon"
+        android:layout_marginLeft="5dp"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/favoriteTweet"
+        android:background="@drawable/ic_favorite_border_grey"
+        android:layout_alignBottom="@+id/screen_name"
+        android:layout_toEndOf="@+id/favorite_count" />
+
+</RelativeLayout>
