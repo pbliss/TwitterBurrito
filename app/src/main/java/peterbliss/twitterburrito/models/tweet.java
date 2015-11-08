@@ -17,6 +17,15 @@ public class Tweet extends RealmObject {
     private int favorite_count;
     private Boolean favorited;
     private int retweet_count;
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User value) {
+        user = value;
+    }
 
     public Date getCreated_at(){
         return created_at;
