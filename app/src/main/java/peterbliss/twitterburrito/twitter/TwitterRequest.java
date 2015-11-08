@@ -1,7 +1,5 @@
 package peterbliss.twitterburrito.twitter;
 
-import com.google.gson.Gson;
-
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -12,17 +10,23 @@ import java.util.Map;
  * Created by pbliss on 11/7/2015.
  */
 public class TwitterRequest {
-    TwitterRoute route;
-    ArrayList<String> params;
-    String jsondata = null;
+    private TwitterRoute route;
+    private String jsondata = null;
+    private HashMap<String, String> requestProperties;
+    private HashMap<String, String> params;
 
     public TwitterRequest(TwitterRoute _route) {
         route = _route;
-        params = new ArrayList<String>();
+        params = new HashMap<>();
+        requestProperties = new HashMap();
     }
 
-    public ArrayList<String> getParams() {
-        return params;
+    public void addURLParam(String key, String value) {
+        params.put(key, value);
+    }
+
+    public void addRequestProperty(String key, String value) {
+        requestProperties.put(key, value);
     }
 
     public String getJsondata() {
@@ -40,9 +44,9 @@ public class TwitterRequest {
         if(route.getRequestMethod().equals("GET")) {
             String paramString = "";
 
-            for (String s : params)
+            for (Map.Entry<String, String> entry : params.entrySet())
             {
-                paramString += "&" + s;
+                paramString += "&" + entry.getKey() + "=" + entry.getValue();
             }
 
             url = new URL(route.getUrl() + paramString);
@@ -50,6 +54,12 @@ public class TwitterRequest {
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod(route.getRequestMethod());
+
+        if(!requestProperties.isEmpty()) {
+            for (Map.Entry<String, String> entry : requestProperties.entrySet()) {
+                connection.setRequestProperty(entry.getKey(), entry.getValue());
+            }
+        }
 
         return connection;
     }
