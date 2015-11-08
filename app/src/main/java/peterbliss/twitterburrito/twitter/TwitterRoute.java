@@ -9,33 +9,24 @@ import java.util.Map;
 public class TwitterRoute {
     private String url;
     private String requestMethod;
-    private Map<String, String> routeDataParams;
-    private String baseUrl;
+    private final String APIURL = "https://api.twitter.com/";
+    private String apiVersion = "/1.1/";
+
+    public void setApiVersion(String value) {
+        apiVersion = value;
+    }
 
     public String getUrl() {
         return url;
-    }
-
-    public void setURL(String _url) {
-        this.url = _url;
     }
 
     public String getRequestMethod() {
         return requestMethod;
     }
 
-    public Map<String, String> getRouteDataParams()
-    {
-        return routeDataParams;
-    }
-
-    public String getBaseUrl()
-    {
-        return baseUrl;
-    }
-
     public enum routes {
-        SEARCH_TWEETS
+        SEARCH_TWEETS,
+        AUTHENTICATE
     }
 
     public TwitterRoute(routes route)
@@ -45,7 +36,14 @@ public class TwitterRoute {
 
         switch (route){
             case SEARCH_TWEETS:{
-                action= "search/tweets";
+                action= "search/tweets.json";
+                break;
+            }
+            case AUTHENTICATE: {
+                //authenticate isnt part of the versioned api
+                apiVersion = "";
+
+                action = "oauth2/token";
                 break;
             }
         }
@@ -59,8 +57,7 @@ public class TwitterRoute {
 
     private void generateUrl(String _method, String action)
     {
-        //url being api url not full url
         this.requestMethod = _method;
-        routeDataParams = new HashMap<String, String>();
+        url = String.format("%s%s/%s", this.APIURL, this.apiVersion, action);
     }
 }
