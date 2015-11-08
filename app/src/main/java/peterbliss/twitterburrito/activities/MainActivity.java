@@ -5,14 +5,22 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import peterbliss.twitterburrito.R;
+import peterbliss.twitterburrito.models.Keyword;
 
 public class MainActivity extends AppCompatActivity {
+
+    private List<Keyword> keywordList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        keywordList = new ArrayList<>();
 
         //call the keywords setup
         //defaulting to 5
@@ -46,8 +54,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Adds a tab for a specified keyword to the system and registers it for search
-    public void addKeyword(String keyword) {
+    public void addKeyword(String term) {
+        Keyword keyword = new Keyword();
+        keyword.setKeyword(term);
 
+        //TODO fire off the query to twitter for the tweets
 
+        keywordList.add(keyword);
     }
 }
