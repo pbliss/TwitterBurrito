@@ -13,6 +13,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //call the keywords setup
+        //defaulting to 5
+        addKeyword("");
+        addKeyword("");
+        addKeyword("");
+        addKeyword("");
+        addKeyword("");
     }
 
     @Override
@@ -35,5 +43,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    //Adds a tab for a specified keyword to the system and registers it for search
+    public void addKeyword(String keyword) {
+
+
     }
 }
