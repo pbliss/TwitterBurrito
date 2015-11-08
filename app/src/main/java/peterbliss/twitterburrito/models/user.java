@@ -9,7 +9,6 @@ public class User extends RealmObject {
     //truncated version of the twitter User object
     private String profile_image_url;
     private String name;
-    private String url;
     private String screen_name;
     private int id;
 
@@ -19,10 +18,6 @@ public class User extends RealmObject {
 
     public String getName() {
         return name;
-    }
-
-    public String getUrl() {
-        return url;
     }
 
     public String getScreen_name() {
@@ -39,10 +34,6 @@ public class User extends RealmObject {
 
     public void setName(String value) {
         name = value;
-    }
-
-    public void setUrl(String value) {
-        url = value;
     }
 
     public void setScreen_name(String value) {
