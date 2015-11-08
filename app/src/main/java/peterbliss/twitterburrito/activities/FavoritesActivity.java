@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import peterbliss.twitterburrito.R;
 
-public class Favorites extends AppCompatActivity {
+public class FavoritesActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

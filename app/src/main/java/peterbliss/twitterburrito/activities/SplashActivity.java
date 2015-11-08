@@ -8,9 +8,9 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import peterbliss.twitterburrito.R;
 
-public class Splash extends AppCompatActivity {
+public class SplashActivity extends AppCompatActivity {
 
-    // Splash screen timer
+    // SplashActivity screen timer
     private static int SPLASH_TIME_OUT = 3000;
 
     @Override
