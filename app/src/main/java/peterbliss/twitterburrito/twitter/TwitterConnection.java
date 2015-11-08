@@ -120,9 +120,7 @@ public class TwitterConnection extends AsyncTask<TwitterRequest, Void, TwitterRe
 
             response = new TwitterResponse();
             response.setStatus(j.getBoolean("status"));
-
-            //TODO
-            //parse the repsonse
+            response.setJsonObject(j);
         }
         catch(org.json.JSONException ex) {
             System.out.println(ex.getMessage());
