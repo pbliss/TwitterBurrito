@@ -7,11 +7,11 @@ import io.realm.RealmObject;
  */
 public class User extends RealmObject {
     //truncated version of the twitter User object
-    String profile_image_url;
-    String name;
-    String url;
-    String screen_name;
-    int id;
+    private String profile_image_url;
+    private String name;
+    private String url;
+    private String screen_name;
+    private int id;
 
     public String getProfile_image_url() {
         return profile_image_url;

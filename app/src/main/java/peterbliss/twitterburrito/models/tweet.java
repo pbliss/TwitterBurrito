@@ -11,12 +11,12 @@ public class Tweet extends RealmObject {
     //this is a truncated object of the actual Tweet api
     //only including the fields we will actually use
 
-    Date created_at;
-    String text;
-    int id;
-    int favorite_count;
-    Boolean favorited;
-    int retweet_count;
+    private Date created_at;
+    private String text;
+    private int id;
+    private int favorite_count;
+    private Boolean favorited;
+    private int retweet_count;
 
     public Date getCreated_at(){
         return created_at;
@@ -42,7 +42,7 @@ public class Tweet extends RealmObject {
         return retweet_count;
     }
 
-    private void setCreated_at(Date value) {
+    public void setCreated_at(Date value) {
         created_at = value;
     }
 
