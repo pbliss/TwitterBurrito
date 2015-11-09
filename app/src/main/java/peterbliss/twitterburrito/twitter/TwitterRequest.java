@@ -1,5 +1,7 @@
 package peterbliss.twitterburrito.twitter;
 
+import com.google.gson.Gson;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ import java.util.Map;
  */
 public class TwitterRequest {
     private TwitterRoute route;
-    private String jsondata = null;
+    private String paramString = "";
     private HashMap<String, String> requestProperties;
     private HashMap<String, String> params;
 
@@ -21,7 +23,7 @@ public class TwitterRequest {
         requestProperties = new HashMap();
     }
 
-    public void addURLParam(String key, String value) {
+    public void addParam(String key, String value) {
         params.put(key, value);
     }
 
@@ -29,8 +31,8 @@ public class TwitterRequest {
         requestProperties.put(key, value);
     }
 
-    public String getJsondata() {
-        return jsondata;
+    public String getParamString() {
+        return paramString;
     }
 
     public HttpURLConnection buildUrlRequest() throws Exception
@@ -41,18 +43,27 @@ public class TwitterRequest {
 
         URL url = new URL(route.getUrl());
 
+        for (Map.Entry<String, String> entry : params.entrySet())
+        {
+            paramString += entry.getKey() + "=" + entry.getValue() + "&";
+        }
+
+        //trim the trailing &
+        paramString = paramString.substring(0, paramString.length() - 1);
+
         if(route.getRequestMethod().equals("GET")) {
-            String paramString = "";
-
-            for (Map.Entry<String, String> entry : params.entrySet())
-            {
-                paramString += "&" + entry.getKey() + "=" + entry.getValue();
-            }
-
-            url = new URL(route.getUrl() + paramString);
+            url = new URL(route.getUrl() + "?" + paramString);
+            paramString = null;
         }
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        if(route.getRequestMethod().equals("POST")) {
+            if (paramString != null && paramString != "") {
+                connection.setRequestProperty("Content-Length", String.format("%d", paramString.getBytes().length));
+            }
+        }
+
         connection.setRequestMethod(route.getRequestMethod());
 
         if(!requestProperties.isEmpty()) {
