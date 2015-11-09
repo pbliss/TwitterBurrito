@@ -12,6 +12,9 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.text.SimpleDateFormat;
 
+import peterbliss.twitterburrito.models.TwitterError;
+import peterbliss.twitterburrito.models.TwitterResponse;
+
 /**
  * Created by pbliss on 11/7/2015.
  */
@@ -50,10 +53,10 @@ public class TwitterConnection extends AsyncTask<TwitterRequest, Void, TwitterRe
             HttpURLConnection connection = request[0].buildUrlRequest();
             connection.connect();
 
-            if(request[0].getJsondata() != null) {
+            if(request[0].getParamString() != null && request[0].getParamString() != "") {
                 OutputStream os = connection.getOutputStream();
                 OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
-                osw.write(request[0].getJsondata());
+                osw.write(request[0].getParamString());
                 osw.flush();
                 osw.close();
             }
@@ -119,14 +122,16 @@ public class TwitterConnection extends AsyncTask<TwitterRequest, Void, TwitterRe
             JSONObject j = new JSONObject(responseStrBuilder.toString());
 
             response = new TwitterResponse();
-            response.setStatus(j.getBoolean("status"));
+            response.setStatus(true);
             response.setJsonObject(j);
         }
         catch(org.json.JSONException ex) {
             System.out.println(ex.getMessage());
+            response.setStatus(false);
         }
         catch (java.io.IOException e) {
             System.out.println(e.getMessage());
+            response.setStatus(false);
         }
 
         return response;
