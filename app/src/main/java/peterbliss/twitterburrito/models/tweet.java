@@ -13,7 +13,7 @@ public class Tweet extends RealmObject {
 
     private Date created_at;
     private String text;
-    private int id;
+    private long id;
     private int favorite_count;
     private Boolean favorited;
     private int retweet_count;
@@ -35,7 +35,7 @@ public class Tweet extends RealmObject {
         return text;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -59,7 +59,7 @@ public class Tweet extends RealmObject {
         text = value;
     }
 
-    public void setId(int value) {
+    public void setId(long value) {
         id = value;
     }
 
