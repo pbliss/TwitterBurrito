@@ -86,6 +86,10 @@ public class TweetParser {
 
                 //dont add invalid or error parsing tweets
                 if(tweet.getId() != -1) {
+
+                    //default the favorited to not
+                    tweet.setFavorited(false);
+
                     tweets.add(tweet);
                 }
             }
