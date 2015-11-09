@@ -1,6 +1,8 @@
-package peterbliss.twitterburrito.twitter;
+package peterbliss.twitterburrito.models;
 
 import org.json.JSONObject;
+
+import peterbliss.twitterburrito.models.TwitterError;
 
 /**
  * Created by pbliss on 11/7/2015.

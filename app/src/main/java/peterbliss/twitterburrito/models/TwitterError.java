@@ -1,4 +1,4 @@
-package peterbliss.twitterburrito.twitter;
+package peterbliss.twitterburrito.models;
 
 /**
  * Created by pbliss on 11/7/2015.
