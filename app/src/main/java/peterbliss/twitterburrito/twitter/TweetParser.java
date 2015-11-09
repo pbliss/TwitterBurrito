@@ -13,7 +13,9 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Locale;
 
+import io.realm.RealmList;
 import peterbliss.twitterburrito.models.Tweet;
 import peterbliss.twitterburrito.models.User;
 
@@ -24,7 +26,7 @@ public class TweetParser {
     public static Tweet parseTweet(JSONObject tweetObj) {
         Tweet tweet = new Tweet();
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy", Locale.ENGLISH);
 
         try {
             if(tweetObj != null) {
@@ -36,8 +38,8 @@ public class TweetParser {
                     e.printStackTrace();
                 }
 
-                tweet.setFavorite_count(tweetObj.getInt("favourites_count"));
-                tweet.setId(tweetObj.getInt("id"));
+                tweet.setFavorite_count(tweetObj.getInt("favorite_count"));
+                tweet.setId(tweetObj.getLong("id"));
                 tweet.setRetweet_count(tweetObj.getInt("retweet_count"));
                 tweet.setText(tweetObj.getString("text"));
 
@@ -65,8 +67,8 @@ public class TweetParser {
         return tweet;
     }
 
-    public static List<Tweet> parseTweets(JSONObject jsonObject) {
-        ArrayList<Tweet> tweets = new ArrayList<Tweet>();
+    public static RealmList<Tweet> parseTweets(JSONObject jsonObject) {
+        RealmList<Tweet> tweets = new RealmList<Tweet>();
 
         try {
 
