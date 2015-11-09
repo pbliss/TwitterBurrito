@@ -9,8 +9,8 @@ import java.util.Map;
 public class TwitterRoute {
     private String url;
     private String requestMethod;
-    private final String APIURL = "https://api.twitter.com/";
-    private String apiVersion = "/1.1/";
+    private final String APIURL = "https://api.twitter.com";
+    private String apiVersion = "/1.1";
 
     public void setApiVersion(String value) {
         apiVersion = value;
@@ -42,7 +42,7 @@ public class TwitterRoute {
             case AUTHENTICATE: {
                 //authenticate isnt part of the versioned api
                 apiVersion = "";
-
+                requestMethod = "POST";
                 action = "oauth2/token";
                 break;
             }
