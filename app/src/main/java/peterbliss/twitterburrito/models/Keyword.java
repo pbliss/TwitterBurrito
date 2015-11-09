@@ -3,6 +3,7 @@ package peterbliss.twitterburrito.models;
 import java.util.Date;
 import java.util.List;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 
 /**
@@ -10,14 +11,23 @@ import io.realm.RealmObject;
  */
 public class Keyword extends RealmObject{
     private String keyword;
-    private List<Tweet> tweetList;
+    private RealmList<Tweet> tweetList;
     private Date lastRefresh;
+    private Boolean loading = false;
+
+    public void setLoading(Boolean value) {
+        loading = value;
+    }
+
+    public Boolean getLoading(){
+        return loading;
+    }
 
     public void setKeyword(String value) {
         keyword = value;
     }
 
-    public void setTweetList(List<Tweet> value) {
+    public void setTweetList(RealmList<Tweet> value) {
         tweetList = value;
     }
 
@@ -29,7 +39,7 @@ public class Keyword extends RealmObject{
         return keyword;
     }
 
-    public List<Tweet> getTweetList() {
+    public RealmList<Tweet> getTweetList() {
         return tweetList;
     }
 
