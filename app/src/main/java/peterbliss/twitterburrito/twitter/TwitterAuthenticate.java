@@ -6,14 +6,20 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import peterbliss.twitterburrito.models.TwitterAuth;
+import peterbliss.twitterburrito.models.TwitterResponse;
 
 /**
  * Created by pbliss on 11/8/2015.
  */
 public class TwitterAuthenticate {
 
-    public static TwitterAuth authenticateConnection() {
-        final TwitterAuth auth = new TwitterAuth();
+    public static TwitterAuth auth;
+
+    public interface AsyncResponse {
+        void processFinish(TwitterAuth auth);
+    }
+
+    public static void authenticateConnection(final AsyncResponse responseCallback) {
 
         try {
             // URL encode the consumer key and secret
@@ -33,18 +39,27 @@ public class TwitterAuthenticate {
             //add required header parameters
             request.addRequestProperty("Authorization", "Basic " + base64Encoded);
             request.addRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
-            request.addRequestProperty("grant_type", "client_credentials");
+
+            request.addParam("grant_type", "client_credentials");
 
             //call the connection on the request
             TwitterConnection connection = new TwitterConnection();
             connection.setResonseCallback(new TwitterConnection.AsyncResponse() {
                 @Override
                 public void processFinish(TwitterResponse output) {
-                    //process the response from the auth request
-                    ///TODO
+                    auth = new TwitterAuth();
 
-                    auth.setToken_type("OAUTH");
-                    auth.setAccess_token("");
+                    try {
+                        //process the response from the auth request
+                        auth.setToken_type(output.getJsonObject().getString("token_type"));
+                        auth.setAccess_token(output.getJsonObject().getString("access_token"));
+
+                        responseCallback.processFinish(auth);
+                    }
+                    catch(org.json.JSONException ex) {
+                        System.out.println(ex.getMessage());
+                        responseCallback.processFinish(null);
+                    }
                 }
             });
 
@@ -52,13 +67,14 @@ public class TwitterAuthenticate {
             connection.execute(request);
         }
         catch(UnsupportedEncodingException ex) {
+            TwitterAuth auth = new TwitterAuth();
             auth.setToken_type("INVALID");
+            responseCallback.processFinish(auth);
         }
-
         catch(IllegalStateException ex1) {
+            TwitterAuth auth = new TwitterAuth();
             auth.setToken_type("INVALID");
+            responseCallback.processFinish(auth);
         }
-
-        return auth;
     }
 }
