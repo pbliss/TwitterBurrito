@@ -5,6 +5,7 @@ import java.util.List;
 import io.realm.RealmList;
 import peterbliss.twitterburrito.models.Keyword;
 import peterbliss.twitterburrito.models.Tweet;
+import peterbliss.twitterburrito.models.TwitterAuth;
 import peterbliss.twitterburrito.twitter.Twitter;
 
 /**
@@ -14,8 +15,11 @@ public class KeywordsController {
 
     public static RealmList<Keyword> keywordList;
 
-    //Adds a tab for a specified keyword to the system and registers it for search
-    public static void addKeyword(String term) {
+    public interface AsyncResponse {
+        void processFinish();
+    }
+
+    public static void addKeyword(String term, final AsyncResponse response) {
         final Keyword keyword = new Keyword();
         keyword.setKeyword(term);
 
@@ -30,6 +34,11 @@ public class KeywordsController {
                 keyword.setLoading(false);
 
                 keyword.setTweetList(tweets);
+
+                //if there is a finished callback call it
+                if(response != null) {
+                    response.processFinish();
+                }
             }
         });
 
@@ -38,5 +47,10 @@ public class KeywordsController {
         //need to observe this in the UI.
         //a spinner showing its still loading is likely best
         keywordList.add(keyword);
+    }
+
+    //Adds a tab for a specified keyword to the system and registers it for search
+    public static void addKeyword(String term) {
+        addKeyword(term, null);
     }
 }
