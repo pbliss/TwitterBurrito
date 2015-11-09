@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmQuery;
 import peterbliss.twitterburrito.models.Keyword;
 import peterbliss.twitterburrito.models.Tweet;
@@ -17,13 +18,13 @@ public class TweetController {
     //need to store the times of the requests, to keep within the rate limit
 
 
-    private Boolean checkRateLimit() {
+    private static Boolean checkRateLimit() {
         //TODO
 
         return true;
     }
 
-    public void refreshTweets(final Keyword keyword) {
+    public static void refreshTweets(final Keyword keyword) {
         //check against the rate limit, only refresh if
         //the tweets are more stale than the limit
 
@@ -32,7 +33,7 @@ public class TweetController {
             //refresh the local cache with tweets
             Twitter.search(keyword.getKeyword(), new Twitter.AsyncResponse() {
                 @Override
-                public void processFinish(List<Tweet> tweets) {
+                public void processFinish(RealmList<Tweet> tweets) {
                     Realm realm = Realm.getDefaultInstance();
                     //begin our write transaction
                     realm.beginTransaction();
@@ -47,7 +48,7 @@ public class TweetController {
     }
 
     //get all favorites from a list of keywords
-    public List<Tweet> getAllFavorites(List<Keyword> keywords) {
+    public static List<Tweet> getAllFavorites(List<Keyword> keywords) {
 
         ArrayList<Tweet> tweets = new ArrayList<>();
 
@@ -60,7 +61,7 @@ public class TweetController {
 
     //query the realm database and pull back a list of cached tweets that have
     //the flag of favorited
-    public List<Tweet> getFavorites(Keyword keyword) {
+    public static List<Tweet> getFavorites(Keyword keyword) {
 
         ArrayList<Tweet> tweets = new ArrayList<>();
 
