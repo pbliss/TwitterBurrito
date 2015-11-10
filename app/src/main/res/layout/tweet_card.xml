@@ -110,16 +110,18 @@
                 android:layout_toEndOf="@+id/favoriteCountIcon"
                 android:layout_marginLeft="5dp"/>
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/favoriteTweet"
-                android:background="@drawable/ic_favorite_border_grey"
+            <ToggleButton
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:id="@+id/favoriteTweetToggle"
+                android:background="@drawable/favoritebutton"
                 android:layout_below="@+id/favorite_count"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="14dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp"/>
+                android:layout_marginBottom="5dp"
+                android:textOn=""
+                android:textOff=""/>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

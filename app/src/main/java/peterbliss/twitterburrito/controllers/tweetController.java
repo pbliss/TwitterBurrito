@@ -76,14 +76,22 @@ public class TweetController {
 
         ArrayList<Tweet> tweets = new ArrayList<>();
 
-        //realm doesnt support this type of query
-        //have to manually search through the keyword list and find the favorites
-        for(Tweet tweet : keyword.getTweetList()) {
-            if(tweet.getFavorited()) {
-                tweets.add(tweet);
+        //avoid crashing on using a null list
+        if(keyword.getTweetList() != null) {
+            //realm doesnt support this type of query
+            //have to manually search through the keyword list and find the favorites
+            for (Tweet tweet : keyword.getTweetList()) {
+                if (tweet.getFavorited()) {
+                    tweets.add(tweet);
+                }
             }
         }
 
         return tweets;
+    }
+
+    //remove tweets from local database over a week old and not favorited
+    public static void cleanOldData(){
+
     }
 }
