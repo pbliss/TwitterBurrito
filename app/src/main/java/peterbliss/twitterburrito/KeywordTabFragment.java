@@ -1,17 +1,27 @@
 package peterbliss.twitterburrito;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import peterbliss.twitterburrito.controllers.KeywordsController;
+import peterbliss.twitterburrito.controllers.TweetController;
+
 public class KeywordTabFragment extends Fragment {
 
     private int keywordIDX;
+    private View progressView;
 
     public static KeywordTabFragment newInstance(int k) {
         KeywordTabFragment fragment = new KeywordTabFragment();
@@ -37,6 +47,50 @@ public class KeywordTabFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_keyword_tab, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_keyword_tab, container, false);
+
+        progressView = view.findViewById(R.id.tweetprogress);
+
+        //setup the recyclerview
+        final RecyclerView rv = (RecyclerView)view.findViewById(R.id.rv);
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity().getApplicationContext());
+        rv.setLayoutManager(llm);
+
+        showProgress(true);
+        //call refresh on the tweet list
+        TweetController.refreshTweets(KeywordsController.keywordList.get(keywordIDX), new TweetController.AsyncResponse() {
+            @Override
+            public void processFinish() {
+                showProgress(false);
+                RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(KeywordsController.keywordList.get(keywordIDX).getTweetList());
+                rv.setAdapter(recyclerViewAdapter);
+            }
+        });
+
+        return view;
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    public void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            progressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
     }
 }
