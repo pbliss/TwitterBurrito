@@ -25,6 +25,7 @@ public class SplashActivity extends AppCompatActivity {
         Realm.setDefaultConfiguration(config);
 
         //authenticate against twitter api here
+        //ensures that we are authticated when we hit the main activity
         TwitterAuthenticate.authenticateConnection(new TwitterAuthenticate.AsyncResponse() {
             @Override
             public void processFinish(TwitterAuth auth) {
@@ -36,21 +37,19 @@ public class SplashActivity extends AppCompatActivity {
                 //call the keywords setup
                 //defaulting to 5
 
-                //first keyword we will wait until it has loaded to continue
-                //this will ensure we enter the app loaded ready to use, not spinning
-                KeywordsController.addKeyword("android", new KeywordsController.AsyncResponse() {
-                    @Override
-                    public void processFinish() {
-                        Intent i = new Intent(SplashActivity.this, MainActivity.class);
-                        startActivity(i);
-                        // close this activity
-                        finish();
-                    }
-                });
-                KeywordsController.addKeyword("angularJS");
-                KeywordsController.addKeyword("java");
-                KeywordsController.addKeyword("burrito");
-                KeywordsController.addKeyword("beer");
+                //Add the keywords to the system
+                KeywordsController.addKeyword("android", false);
+                KeywordsController.addKeyword("angularJS", false);
+                KeywordsController.addKeyword("java", false);
+                KeywordsController.addKeyword("burrito", false);
+                KeywordsController.addKeyword("beer", false);
+
+                //load the main activity
+                Intent i = new Intent(SplashActivity.this, MainActivity.class);
+                startActivity(i);
+                // close this activity
+                finish();
+
             } else {
                 //error during authentication
                 Toast.makeText(getApplicationContext(), "Error authenticating twitter connection", Toast.LENGTH_SHORT);
