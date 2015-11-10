@@ -26,7 +26,6 @@ dependencies {
     compile files('libs/gson-2.3.1.jar')
     compile files('libs/volley.jar')
     compile files('libs/realm-0.84.1.jar')
-    compile 'com.baoyz.swipemenulistview:library:1.3.0'
     compile 'com.android.support:cardview-v7:22.0.+'
     compile 'com.android.support:recyclerview-v7:22.0.+'
 }
