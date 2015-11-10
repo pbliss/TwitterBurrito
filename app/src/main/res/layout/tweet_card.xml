@@ -6,10 +6,13 @@
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
-        android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
-        card_view:cardCornerRadius="4dp">
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="4dp"
+        android:layout_margin="6dp"
+        card_view:cardUseCompatPadding="true"
+        >
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -19,7 +22,8 @@
                 android:layout_width="55dp"
                 android:layout_height="55dp"
                 android:scaleType="fitXY"
-                android:layout_marginLeft="5dp" />
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -50,7 +54,8 @@
                 android:text="Text"
                 android:id="@+id/text"
                 android:textColor="@color/textDark"
-                android:layout_below="@+id/thumbnail"
+                android:layout_below="@+id/screen_name"
+                android:layout_marginTop="20dp"
                 android:layout_alignStart="@+id/thumbnail" />
 
             <TextView
@@ -61,16 +66,18 @@
                 android:id="@+id/created_at"
                 android:textColor="@color/textGreyBlue"
                 android:layout_below="@+id/text"
+                android:layout_marginTop="5dp"
                 android:layout_alignStart="@+id/text" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/retweetCountIcon"
-                android:layout_below="@+id/created_at"
-                android:layout_toEndOf="@+id/text"
                 android:layout_marginTop="18dp"
-                android:background="@drawable/retweetcount" />
+                android:background="@drawable/retweetcount"
+                android:layout_below="@+id/created_at"
+                android:layout_marginLeft="5dp"
+                 />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -80,7 +87,7 @@
                 android:id="@+id/retweet_count"
                 android:textColor="@color/textGreyBlue"
                 android:layout_alignTop="@+id/retweetCountIcon"
-                android:layout_alignStart="@+id/screen_name" />
+                android:layout_toEndOf="@+id/retweetCountIcon" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -108,8 +115,11 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/favoriteTweet"
                 android:background="@drawable/ic_favorite_border_grey"
-                android:layout_alignBottom="@+id/screen_name"
-                android:layout_toEndOf="@+id/favorite_count" />
+                android:layout_below="@+id/favorite_count"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="14dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"/>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>
