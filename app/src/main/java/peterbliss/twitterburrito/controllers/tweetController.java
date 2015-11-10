@@ -44,7 +44,15 @@ public class TweetController {
                     realm.beginTransaction();
 
                     keyword.setLoading(false);
-                    keyword.setTweetList(tweets);
+
+                    //init the list if its null
+                    if(keyword.getTweetList() == null) {
+                        keyword.setTweetList(new RealmList<Tweet>());
+                    }
+
+                    keyword.getTweetList().addAll(0, tweets);
+
+                    //keyword.setTweetList(tweets);
 
                     //commit the changes
                     realm.commitTransaction();
