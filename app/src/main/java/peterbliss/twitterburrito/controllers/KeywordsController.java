@@ -2,6 +2,7 @@ package peterbliss.twitterburrito.controllers;
 
 import java.util.List;
 
+import io.realm.Realm;
 import io.realm.RealmList;
 import peterbliss.twitterburrito.models.Keyword;
 import peterbliss.twitterburrito.models.Tweet;
@@ -19,28 +20,31 @@ public class KeywordsController {
         void processFinish();
     }
 
-    public static void addKeyword(String term, final AsyncResponse response) {
+    public static void addKeyword(String term, Boolean refresh, final AsyncResponse response) {
         final Keyword keyword = new Keyword();
+
+        Realm realm = Realm.getDefaultInstance();
+
+        //begin our write transaction
+        realm.beginTransaction();
+
         keyword.setKeyword(term);
 
         //let the UI know an async task is getting the tweets for this
         keyword.setLoading(true);
 
-        Twitter.search(term, new Twitter.AsyncResponse() {
-            @Override
-            public void processFinish(RealmList<Tweet> tweets) {
+        realm.commitTransaction();
 
-                //let the UI know that this keyword list is loaded
-                keyword.setLoading(false);
-
-                keyword.setTweetList(tweets);
-
-                //if there is a finished callback call it
-                if(response != null) {
-                    response.processFinish();
+        if(refresh) {
+            TweetController.refreshTweets(keyword, new TweetController.AsyncResponse() {
+                @Override
+                public void processFinish() {
+                    if (response != null) {
+                        response.processFinish();
+                    }
                 }
-            }
-        });
+            });
+        }
 
         //the keyword will be added to the list before the
         //tweets will have been fully loaded
@@ -50,7 +54,7 @@ public class KeywordsController {
     }
 
     //Adds a tab for a specified keyword to the system and registers it for search
-    public static void addKeyword(String term) {
-        addKeyword(term, null);
+    public static void addKeyword(String term, Boolean refresh) {
+        addKeyword(term, refresh, null);
     }
 }

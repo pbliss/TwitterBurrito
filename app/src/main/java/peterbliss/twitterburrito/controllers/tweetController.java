@@ -18,13 +18,17 @@ public class TweetController {
     //need to store the times of the requests, to keep within the rate limit
 
 
+    public interface AsyncResponse {
+        void processFinish();
+    }
+
     private static Boolean checkRateLimit() {
         //TODO
 
         return true;
     }
 
-    public static void refreshTweets(final Keyword keyword) {
+    public static void refreshTweets(final Keyword keyword, final AsyncResponse response) {
         //check against the rate limit, only refresh if
         //the tweets are more stale than the limit
 
@@ -35,13 +39,20 @@ public class TweetController {
                 @Override
                 public void processFinish(RealmList<Tweet> tweets) {
                     Realm realm = Realm.getDefaultInstance();
+
                     //begin our write transaction
                     realm.beginTransaction();
 
+                    keyword.setLoading(false);
                     keyword.setTweetList(tweets);
 
                     //commit the changes
                     realm.commitTransaction();
+
+                    //if there is a finished callback call it
+                    if(response != null) {
+                        response.processFinish();
+                    }
                 }
             });
         }
