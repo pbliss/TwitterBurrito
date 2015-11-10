@@ -43,6 +43,7 @@ public class Twitter {
         request.addRequestProperty("Authorization", "Bearer " + TwitterAuthenticate.auth.getAccess_token());
         request.addRequestProperty("Content-Type", "application/json");
         request.addParam("q", keyword);
+        request.addParam("count", "100");
 
         TwitterConnection connection = new TwitterConnection();
 
@@ -52,7 +53,7 @@ public class Twitter {
                 //TODO handle errors from the response
 
                 //examine the results
-                if(output.getStatus()) {
+                if (output.getStatus()) {
 
                     //parse the reponse into a list of tweets
                     responseCallback.processFinish(TweetParser.parseTweets(output.getJsonObject()));
