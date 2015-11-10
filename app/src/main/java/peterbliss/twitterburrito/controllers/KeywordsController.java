@@ -4,6 +4,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmQuery;
 import peterbliss.twitterburrito.models.Keyword;
 import peterbliss.twitterburrito.models.Tweet;
 import peterbliss.twitterburrito.models.TwitterAuth;
@@ -21,19 +22,27 @@ public class KeywordsController {
     }
 
     public static void addKeyword(String term, Boolean refresh, final AsyncResponse response) {
-        final Keyword keyword = new Keyword();
-
         Realm realm = Realm.getDefaultInstance();
 
-        //begin our write transaction
-        realm.beginTransaction();
+        //load cached data
+        RealmQuery<Keyword> realmQuery = realm.where(Keyword.class);
+        realmQuery.equalTo("keyword",term);
 
-        keyword.setKeyword(term);
+        Keyword keyword = realmQuery.findFirst();
 
-        //let the UI know an async task is getting the tweets for this
-        keyword.setLoading(true);
+        if(keyword == null) {
+            //begin our write transaction
+            realm.beginTransaction();
 
-        realm.commitTransaction();
+            keyword = realm.createObject(Keyword.class);
+
+            keyword.setKeyword(term);
+
+            //let the UI know an async task is getting the tweets for this
+            keyword.setLoading(true);
+
+            realm.commitTransaction();
+        }
 
         if(refresh) {
             TweetController.refreshTweets(keyword, new TweetController.AsyncResponse() {
