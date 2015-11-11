@@ -38,9 +38,6 @@ public class KeywordsController {
 
             keyword.setKeyword(term);
 
-            //let the UI know an async task is getting the tweets for this
-            keyword.setLoading(true);
-
             realm.commitTransaction();
         }
 
