@@ -5,21 +5,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-
-import java.util.List;
-
+import com.android.volley.toolbox.ImageLoader;
 import io.realm.Realm;
-import peterbliss.twitterburrito.controllers.KeywordsController;
-import peterbliss.twitterburrito.models.Keyword;
+import io.realm.RealmList;
 import peterbliss.twitterburrito.models.Tweet;
+import peterbliss.twitterburrito.util.VolleySingleton;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.TweetViewHolder> {
 
-    private int keywordIndex;
     private ToggleButton favoriteButton;
+    private RealmList<Tweet> tweetList;
 
     public static class TweetViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
@@ -44,8 +41,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
-    RecyclerViewAdapter(int idx){
-        this.keywordIndex = idx;
+    RecyclerViewAdapter(RealmList<Tweet> tweetlist){
+        tweetList = tweetlist;
     }
 
     @Override
@@ -55,6 +52,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public TweetViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.tweet_card, viewGroup, false);
 
         favoriteButton = (ToggleButton) v.findViewById(R.id.favoriteTweetToggle);
@@ -65,7 +63,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 Realm realm = Realm.getDefaultInstance();
                 //begin our write transaction
                 realm.beginTransaction();
-                KeywordsController.keywordList.get(keywordIndex).getTweetList().get((int) v.getTag()).setFavorited(((ToggleButton)v).isChecked());
+                tweetList.get((int) v.getTag()).setFavorited(((ToggleButton) v).isChecked());
                 realm.commitTransaction();
             }
         });
@@ -75,28 +73,31 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(TweetViewHolder tweetViewHolder, int i) {
-        tweetViewHolder.favorite_count.setText(String.valueOf(KeywordsController.keywordList.get(keywordIndex).getTweetList().get(i).getFavorite_count()));
-        tweetViewHolder.retweet_count.setText(String.valueOf(KeywordsController.keywordList.get(keywordIndex).getTweetList().get(i).getRetweet_count()));
-        tweetViewHolder.screen_name.setText("@" + KeywordsController.keywordList.get(keywordIndex).getTweetList().get(i).getUser().getScreen_name());
-        tweetViewHolder.name.setText(KeywordsController.keywordList.get(keywordIndex).getTweetList().get(i).getUser().getName());
-        tweetViewHolder.text.setText(KeywordsController.keywordList.get(keywordIndex).getTweetList().get(i).getText());
-        tweetViewHolder.created_at.setText(KeywordsController.keywordList.get(keywordIndex).getTweetList().get(i).getCreated_at().toString());
+
+        //load the tweet data to the holder
+        tweetViewHolder.favorite_count.setText(String.valueOf(tweetList.get(i).getFavorite_count()));
+        tweetViewHolder.retweet_count.setText(String.valueOf(tweetList.get(i).getRetweet_count()));
+        tweetViewHolder.screen_name.setText("@" + tweetList.get(i).getUser().getScreen_name());
+        tweetViewHolder.name.setText(tweetList.get(i).getUser().getName());
+        tweetViewHolder.text.setText(tweetList.get(i).getText());
+        tweetViewHolder.created_at.setText(tweetList.get(i).getCreated_at().toString());
         tweetViewHolder.itemView.findViewById(R.id.favoriteTweetToggle).setTag(i);
 
         //toggle button if it has been previously favorited
-        if(KeywordsController.keywordList.get(keywordIndex).getTweetList().get(i).getFavorited()) {
+        if (tweetList.get(i).getFavorited()) {
             ((ToggleButton) tweetViewHolder.itemView.findViewById(R.id.favoriteTweetToggle)).setChecked(true);
         }
 
-
-        //TODO
-        //tweetViewHolder.thumbnail
+        //pull down the profile image
+        ImageLoader imageLoader = VolleySingleton.getInstance().getImageLoader();
+        tweetViewHolder.thumbnail.setImageUrl(tweetList.get(i).getUser().getProfile_image_url(), imageLoader);
+        tweetViewHolder.thumbnail.setVisibility(View.VISIBLE);
     }
 
     @Override
     public int getItemCount() {
-        if(KeywordsController.keywordList.get(keywordIndex).getTweetList() != null) {
-            return KeywordsController.keywordList.get(keywordIndex).getTweetList().size();
+        if(tweetList != null) {
+            return tweetList.size();
         }
         return 0;
     }
