@@ -3,23 +3,19 @@ package peterbliss.twitterburrito;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import peterbliss.twitterburrito.controllers.KeywordsController;
 import peterbliss.twitterburrito.controllers.TweetController;
+import peterbliss.twitterburrito.util.WrappingLinearLayoutManager;
 
 public class KeywordTabFragment extends Fragment {
 
@@ -58,42 +54,61 @@ public class KeywordTabFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_keyword_tab, container, false);
 
+        //the spinner
         progressView = view.findViewById(R.id.tweetprogress);
 
         //setup the recyclerview
         final RecyclerView rv = (RecyclerView)view.findViewById(R.id.rv);
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        rv.setLayoutManager(linearLayoutManager);
 
-        rv.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        //index -1 is the favorite list
+        if(keywordIDX != -1) {
+            final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+            rv.setLayoutManager(linearLayoutManager);
+            rv.setItemAnimator(new DefaultItemAnimator());
+            rv.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                //adapted from
+                //http://stackoverflow.com/questions/26543131/how-to-implement-endless-list-with-recyclerview
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
 
-            //adapted from
-            //http://stackoverflow.com/questions/26543131/how-to-implement-endless-list-with-recyclerview
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+                    visibleItemCount = rv.getChildCount();
+                    totalItemCount = linearLayoutManager.getItemCount();
+                    firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
 
-                visibleItemCount = rv.getChildCount();
-                totalItemCount = linearLayoutManager.getItemCount();
-                firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
+                    if (loading) {
+                        if (totalItemCount > previousTotal) {
+                            loading = false;
+                            previousTotal = totalItemCount;
+                        }
+                    }
+                    if (!loading && (totalItemCount - visibleItemCount)
+                            <= (firstVisibleItem + visibleThreshold)) {
+                        // End has been reached
 
-                if (loading) {
-                    if (totalItemCount > previousTotal) {
-                        loading = false;
-                        previousTotal = totalItemCount;
+                        //index -1 is the favorite list
+                        if(keywordIDX != -1) {
+                            doRefresh(rv);
+                        }
+                        loading = true;
                     }
                 }
-                if (!loading && (totalItemCount - visibleItemCount)
-                        <= (firstVisibleItem + visibleThreshold)) {
-                    // End has been reached
+            });
 
-                    doRefresh(rv);
-                    loading = true;
-                }
-            }
-        });
+            doRefresh(rv);
+        }
+        else {
+            //found it would not display without a custom layout manager
+            WrappingLinearLayoutManager linearLayoutManager = new WrappingLinearLayoutManager(getActivity());
+            rv.setLayoutManager(linearLayoutManager);
+            showProgress(false);
 
-        doRefresh(rv);
+            //we dont need to refresh so just pass the favoritelist to the recycler
+            RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(TweetController.getAllFavorites(KeywordsController.keywordList));
+            rv.setAdapter(recyclerViewAdapter);
+            rv.setNestedScrollingEnabled(false);
+            rv.setHasFixedSize(false);
+        }
 
         return view;
     }
@@ -105,7 +120,7 @@ public class KeywordTabFragment extends Fragment {
             @Override
             public void processFinish() {
                 showProgress(false);
-                RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(keywordIDX);
+                RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(KeywordsController.keywordList.get(keywordIDX).getTweetList());
                 rv.setAdapter(recyclerViewAdapter);
             }
         });

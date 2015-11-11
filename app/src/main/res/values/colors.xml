@@ -2,4 +2,5 @@
 <resources>
     <color name="textDark">#000000</color>
     <color name="textGreyBlue">#7a8790</color>
+    <color name="headerbar">#79b5fe</color>
 </resources>
