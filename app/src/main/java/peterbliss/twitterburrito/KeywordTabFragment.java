@@ -22,6 +22,7 @@ public class KeywordTabFragment extends Fragment {
     private int keywordIDX;
     private View progressView;
 
+    private RecyclerView rv;
     private int previousTotal = 0;
     private boolean loading = true;
     private int visibleThreshold = 2;
@@ -37,6 +38,19 @@ public class KeywordTabFragment extends Fragment {
 
     public KeywordTabFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //dont refresh the keyword list that is handled a different place
+        if (keywordIDX != -1) {
+            //we got a resume lets refresh the tweet list
+            //this will always keep it refreshed and also will remove a favorited
+            //selection from a tweet in the list if the item was unfavorited in the favorites UI
+            doRefresh();
+        }
     }
 
     @Override
@@ -58,7 +72,7 @@ public class KeywordTabFragment extends Fragment {
         progressView = view.findViewById(R.id.tweetprogress);
 
         //setup the recyclerview
-        final RecyclerView rv = (RecyclerView)view.findViewById(R.id.rv);
+        rv = (RecyclerView)view.findViewById(R.id.rv);
 
         //index -1 is the favorite list
         if(keywordIDX != -1) {
@@ -88,14 +102,14 @@ public class KeywordTabFragment extends Fragment {
 
                         //index -1 is the favorite list
                         if(keywordIDX != -1) {
-                            doRefresh(rv);
+                            doRefresh();
                         }
                         loading = true;
                     }
                 }
             });
 
-            doRefresh(rv);
+            doRefresh();
         }
         else {
             //found it would not display without a custom layout manager
@@ -113,7 +127,7 @@ public class KeywordTabFragment extends Fragment {
         return view;
     }
 
-    private void doRefresh(final RecyclerView rv) {
+    private void doRefresh() {
         showProgress(true);
         //call refresh on the tweet list
         TweetController.refreshTweets(KeywordsController.keywordList.get(keywordIDX), new TweetController.AsyncResponse() {
