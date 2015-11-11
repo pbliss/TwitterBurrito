@@ -1,18 +1,10 @@
 package peterbliss.twitterburrito.twitter;
 
-import android.support.annotation.NonNull;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Locale;
 
 import io.realm.RealmList;

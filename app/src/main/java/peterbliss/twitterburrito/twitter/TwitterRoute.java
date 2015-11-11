@@ -1,8 +1,5 @@
 package peterbliss.twitterburrito.twitter;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by pbliss on 11/7/2015.
  */
@@ -55,6 +52,7 @@ public class TwitterRoute {
         generateUrl(_method, action);
     }
 
+    //build a url from the parameters specified
     private void generateUrl(String _method, String action)
     {
         this.requestMethod = _method;

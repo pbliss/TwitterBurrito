@@ -1,10 +1,7 @@
 package peterbliss.twitterburrito.twitter;
 
-import com.google.gson.Gson;
-
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,8 +38,10 @@ public class TwitterRequest {
             throw new Exception("A route must be specified");
         }
 
+        //get a new url object with the url for our route
         URL url = new URL(route.getUrl());
 
+        //build the parameter string for the request
         for (Map.Entry<String, String> entry : params.entrySet())
         {
             paramString += entry.getKey() + "=" + entry.getValue() + "&";
@@ -51,13 +50,16 @@ public class TwitterRequest {
         //trim the trailing &
         paramString = paramString.substring(0, paramString.length() - 1);
 
+        //set up the parameters for a get request
         if(route.getRequestMethod().equals("GET")) {
             url = new URL(route.getUrl() + "?" + paramString);
             paramString = null;
         }
 
+        //open the connection
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
+        //setup the parameters for the post request
         if(route.getRequestMethod().equals("POST")) {
             if (paramString != null && paramString != "") {
                 connection.setRequestProperty("Content-Length", String.format("%d", paramString.getBytes().length));
@@ -66,6 +68,7 @@ public class TwitterRequest {
 
         connection.setRequestMethod(route.getRequestMethod());
 
+        //if there are request properties add them to the connection
         if(!requestProperties.isEmpty()) {
             for (Map.Entry<String, String> entry : requestProperties.entrySet()) {
                 connection.setRequestProperty(entry.getKey(), entry.getValue());

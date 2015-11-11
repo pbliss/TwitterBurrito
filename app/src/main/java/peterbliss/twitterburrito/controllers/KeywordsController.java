@@ -30,6 +30,7 @@ public class KeywordsController {
 
         Keyword keyword = realmQuery.findFirst();
 
+        //if the keyword is new we have to setup a realm object for it
         if(keyword == null) {
             //begin our write transaction
             realm.beginTransaction();

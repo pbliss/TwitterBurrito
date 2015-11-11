@@ -81,13 +81,13 @@ public class TwitterConnection extends AsyncTask<TwitterRequest, Void, TwitterRe
 
         }
         catch(Exception exception) {
-            this.executing = false;
-
             TwitterError error = new TwitterError();
             error.setMessage(exception.getMessage());
             error.setCode(100);
             response.setError(error);
         }
+
+        finished = true;
 
         return response;
     }
