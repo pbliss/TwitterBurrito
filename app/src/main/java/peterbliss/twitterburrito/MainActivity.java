@@ -1,5 +1,6 @@
 package peterbliss.twitterburrito;
 
+import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.content.Intent;
 import android.support.v4.view.ViewPager;
@@ -11,11 +12,22 @@ import android.widget.ImageButton;
 public class MainActivity extends AppCompatActivity {
     private ImageButton favoritesButton;
     private android.support.v7.widget.Toolbar toolbar;
+    private static Context mAppContext;
+
+    public static Context getAppContext() {
+        return mAppContext;
+    }
+    public void setAppContext(Context mAppContext) {
+        this.mAppContext = mAppContext;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //save the context
+        this.setAppContext(getApplicationContext());
 
         //setup the favorites button
         favoritesButton = (ImageButton) findViewById(R.id.openFavorites);
