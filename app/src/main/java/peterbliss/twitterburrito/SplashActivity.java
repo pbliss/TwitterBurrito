@@ -10,6 +10,7 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmList;
 import peterbliss.twitterburrito.controllers.KeywordsController;
+import peterbliss.twitterburrito.controllers.TweetController;
 import peterbliss.twitterburrito.models.TwitterAuth;
 import peterbliss.twitterburrito.twitter.TwitterAuthenticate;
 
@@ -43,6 +44,9 @@ public class SplashActivity extends AppCompatActivity {
                 KeywordsController.addKeyword("java", false);
                 KeywordsController.addKeyword("burrito", false);
                 KeywordsController.addKeyword("beer", false);
+
+                //do little house keeping
+                TweetController.cleanOldData(KeywordsController.keywordList);
 
                 //load the main activity
                 Intent i = new Intent(SplashActivity.this, MainActivity.class);
