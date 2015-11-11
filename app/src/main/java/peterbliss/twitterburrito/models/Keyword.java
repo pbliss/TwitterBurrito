@@ -13,15 +13,6 @@ public class Keyword extends RealmObject{
     private String keyword;
     private RealmList<Tweet> tweetList;
     private Date lastRefresh;
-    private Boolean loading = false;
-
-    public void setLoading(Boolean value) {
-        loading = value;
-    }
-
-    public Boolean getLoading(){
-        return loading;
-    }
 
     public void setKeyword(String value) {
         keyword = value;
