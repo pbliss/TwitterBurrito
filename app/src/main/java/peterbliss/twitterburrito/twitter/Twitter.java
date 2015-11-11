@@ -44,6 +44,7 @@ public class Twitter {
         request.addRequestProperty("Content-Type", "application/json");
         request.addParam("q", keyword);
         request.addParam("count", "100");
+        request.addParam("lang", "en"); //was getting lots of chinese, restricting to english
 
         TwitterConnection connection = new TwitterConnection();
 
